@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './src/main.jsx',
+  entry: ['./src/main.jsx', './src/Form.jsx'],
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'public')
