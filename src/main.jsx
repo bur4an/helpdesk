@@ -32,8 +32,6 @@ class NameForm extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-      </div>
-      <div>
         <h1>{this.state.input}</h1>
           { this.state.data.map(user =>
             <div key={user.id}>{user.username}</div>
