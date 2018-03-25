@@ -14,6 +14,7 @@ class DataForm extends React.Component {
   }
 
   handleSubmit(event) {
+    this.setState({data:[]});
     fetch('/data',{
         method:'POST',
         headers: {
