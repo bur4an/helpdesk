@@ -14,7 +14,7 @@ class DataForm extends React.Component {
   }
 
   handleSubmit(event) {
-    fetch('/users',{
+    fetch('/data',{
         method:'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -22,7 +22,7 @@ class DataForm extends React.Component {
         body: JSON.stringify({search: this.state.input})
         })
       .then(res => res.json())
-      .then(users => this.setState({ data: users }));
+      .then(list => this.setState({ data: list }));
     event.preventDefault();
   }
 
@@ -36,9 +36,9 @@ class DataForm extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <h1>Users</h1>
-          { this.state.data.map(user =>
-            <div key={user.id}>{user.username}</div>
+        <h1>Data</h1>
+          { this.state.data.map(list =>
+            <div key={list.itemId}>{list.title}</div>
           )}
       </div>
     );

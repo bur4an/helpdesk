@@ -18,7 +18,7 @@ module.exports = {
       { test: /\.jsx$/, exclude: /node_modules/, loader: "babel-loader" }
     ]
   },
-  mode: 'development',
+  mode: 'production',
   devServer: {
     contentBase: path.join(__dirname, "public"),
     compress: true,
