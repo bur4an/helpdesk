@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import NameForm from './Form.jsx'
+import App from './App.jsx'
 
 ReactDOM.render(
-  <NameForm />,
+  <App />,
   document.getElementById('root')
 );

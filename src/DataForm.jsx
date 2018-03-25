@@ -1,6 +1,6 @@
 import React from 'react';
 
-class NameForm extends React.Component {
+class DataForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {input: '', data: []};
@@ -14,11 +14,16 @@ class NameForm extends React.Component {
   }
 
   handleSubmit(event) {
-    fetch('/users')
+    fetch('/users',{
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({search: this.state.input})
+        })
       .then(res => res.json())
       .then(users => this.setState({ data: users }));
     event.preventDefault();
-
   }
 
   render() {
@@ -31,7 +36,7 @@ class NameForm extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <h1>{this.state.input}</h1>
+        <h1>Users</h1>
           { this.state.data.map(user =>
             <div key={user.id}>{user.username}</div>
           )}
@@ -40,4 +45,4 @@ class NameForm extends React.Component {
   }
 }
 
-export default NameForm;
+export default DataForm;

@@ -2,9 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: ['./src/main.jsx', './src/Form.jsx'],
+  entry: ['./src/index.jsx'],
   output: {
-    filename: '[name].js',
+    filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   },
   plugins: [

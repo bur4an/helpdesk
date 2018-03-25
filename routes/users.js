@@ -1,10 +1,10 @@
 var express = require('express')
 var router = express.Router()
 
-router.get('/', function(req, res) {
+router.post('/', function(req, res) {
   res.json([{
   	id: 1,
-  	username: "samsepi0l"
+  	username: req.body.search
   }, {
   	id: 2,
   	username: "D0loresH4ze"
