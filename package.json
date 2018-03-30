@@ -25,6 +25,8 @@
   "dependencies": {
     "ebay-api": "^1.13.7",
     "express-session": "^1.15.6",
+    "fast-csv": "^2.4.1",
+    "fs": "0.0.1-security",
     "material-ui": "^0.20.0",
     "path": "^0.12.7",
     "react": "^16.2.0",

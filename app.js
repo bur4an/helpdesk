@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 
 const data = require('./routes/data')
+const fileData = require('./routes/fileData')
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,6 +18,7 @@ app.use(session({
 }))
 
 app.use('/data', data)
+app.use('/fileData', fileData)
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

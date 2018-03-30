@@ -1,12 +1,12 @@
 var express = require('express')
 var router = express.Router()
+var ebay = require('ebay-api')
 
 router.post('/', function(req, res) {
   /**
    * example eBay API request to FindingService:findItemsByKeywords
    */
-
-  var ebay = require('ebay-api');
+  var items = [];
 
   var params = {
     keywords: req.body.search,
