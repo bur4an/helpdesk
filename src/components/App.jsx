@@ -10,13 +10,9 @@ class App extends React.Component {
   render(){
     return(
       <div>
-        <Welcome name="World" />
-        <table>
-          <tr valign="top">
-          <td><DataForm /></td>
-          <td><FileDataForm /></td>
-          </tr>
-        </table>
+        <Welcome name="eBayer" />
+        <DataForm />
+        <FileDataForm />
       </div>
     )
   }

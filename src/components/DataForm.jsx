@@ -37,7 +37,7 @@ class DataForm extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <h1>Data</h1>
+        <h1>Result</h1>
         { this.state.data.map(list =>
           <div key={list.itemId}>{list.title}</div>
         )}

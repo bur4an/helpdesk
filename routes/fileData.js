@@ -5,7 +5,7 @@ var csv = require("fast-csv");
 var ebay = require("ebay-api");
 var path = require('path')
 
-router.get('/', function(req, res) {
+router.post('/', function(req, res) {
   var items = [];
   var index = 0;
   var stream = fs.createReadStream(path.resolve(__dirname,'../pricelist/STDPRICE_FULL.TXT'));
@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
      headers: true
    })
    .on("data", function(data) {
-     if(data["Vendor Name"] == "LOGITECH"){
+     if(data["Vendor Name"] == req.body.search){
        items[index] = data
        index++
      }
