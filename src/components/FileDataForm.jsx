@@ -29,14 +29,14 @@ class FileDataForm extends React.Component {
   }
 
   handleClick(event) {
-    console.log(event.target.value)
+    console.log(event.target)
     this.setState({list:[]});
-    fetch('/data', {
+    fetch("/data", {
         method:'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({search: event.target.value})
+        body: JSON.stringify({search: event.target.innerHTML})
         })
       .then(res => res.json())
       .then(list => this.setState({ list: list }));
@@ -46,42 +46,67 @@ class FileDataForm extends React.Component {
   render() {
     return (
       <div>
+        <Form submitAction={this.handleSubmit} changeAction={this.handleChange} input={this.state.input} />
         <table>
           <tr valign="top">
             <td>
-              <div>
-                <form onSubmit={this.handleSubmit}>
-                  <select value={this.state.input} onChange={this.handleChange}>
-                    <option value="LOGITECH">Logitech</option>
-                    <option value="MICROSOFT">Microsoft</option>
-                    <option selected value="ADOBE">Adobe</option>
-                    <option value="ACER">Acer</option>
-                  </select>
-                  <input type="submit" value="Submit" />
-                </form>
-              </div>
-              <h1>Ingram List</h1>
-              <ol>
-                { this.state.data.map(list =>
-                  <li key={list["Ingram Part Number"]}>
-                      <button onClick={this.handleClick} value={list["Vendor Name"]}>{list["Ingram Part Description"]}</button>
-                  </li>
-                )}
-              </ol>
+              <IngramList data={this.state.data} clickAction={this.handleClick} />
             </td>
             <td>
-              <h1>eBay List</h1>
-              <ol>
-                { this.state.list.map(list =>
-                  <li key={list.itemId}>{list.title}</li>
-                )}
-              </ol>
+              <EbayList data={this.state.list} />
             </td>
           </tr>
         </table>
       </div>
     );
   }
+}
+
+function EbayList (props){
+  return (
+    <div>
+    <h1>eBay List</h1>
+      { props.data.map(list =>
+        <div key={list.ItemId}><a href={list.ViewItemURLForNaturalSearch}>{list.Title}</a> <span color="red">[{list.QuantitySold}]</span> ({list.CurrentPrice.amount})</div>
+      )}
+  </div>
+  )
+}
+
+function IngramList (props){
+  return (
+    <div>
+    <h1>Ingram List</h1>
+    <ol>
+      { props.data.map(list =>
+        <li>
+          <div>
+                <strong>{list["Ingram Part Description"]} ({list["Customer Price with Tax"]})</strong>
+          </div>
+          <div onClick={props.clickAction} key={list["Vendor Part Number"]}>
+                {list["Vendor Name"]} {list["Vendor Part Number"]}
+          </div>
+        </li>
+      )}
+    </ol>
+  </div>
+  )
+}
+
+function Form (props){
+  return (
+    <div>
+      <form onSubmit={props.submitAction}>
+        <select value={props.input} onChange={props.changeAction}>
+          <option value="LOGITECH">Logitech</option>
+          <option value="MICROSOFT">Microsoft</option>
+          <option selected value="ADOBE">Adobe</option>
+          <option value="ACER">Acer</option>
+        </select>
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  )
 }
 
 export default FileDataForm;

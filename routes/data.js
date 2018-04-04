@@ -9,24 +9,36 @@ router.post('/', function(req, res) {
   var items = [];
 
   var params = {
-    keywords: req.body.search,
-
-    // add additional fields
-    outputSelector: ['AspectHistogram'],
-
-    paginationInput: {
-      entriesPerPage: 10
-    },
-
-    itemFilter: [
-      {name: 'FreeShippingOnly', value: true},
-      {name: 'MaxPrice', value: '150'}
-    ],
-
-    /*domainFilter: [
-      {name: 'domainName', value: 'Digital_Cameras'}
-    ]*/
-  };
+      keywords: req.body.search,
+      sortOrder: 'PricePlusShippingAsc',
+      paginationInput:{
+              entriesPerPage: '10',
+              pageNumber: 1,
+                              },
+      itemFilter: [{
+              name: 'Condition',
+              value: '1000'
+            }, {
+              name: 'LocatedIn',
+              value: 'AU'
+            }, {
+              name: 'ListingType',
+              value: 'FixedPrice'
+            },
+            {
+              name: 'HideDuplicateItems',
+              value: 'true'
+            },
+            {
+              name: 'ListedIn',
+              value: 'EBAY-AU'
+            },
+            /*{
+              name: 'ExcludeSeller',
+              value: ['officesupplyaustralia','mobiletechmart']
+            },*/
+            ]
+      };
 
   ebay.xmlRequest({
       serviceName: 'Finding',
@@ -38,12 +50,30 @@ router.post('/', function(req, res) {
     // gets all the items together in a merged array
     function itemsCallback(error, itemsResponse) {
       if (error) throw error;
+      console.log(itemsResponse)
+      if (itemsResponse.ack === 'Success')
+        itemsResponse.searchResult.item.forEach(function(item) {
+            ebay.xmlRequest({
+                serviceName: 'Shopping',
+                opType: 'GetSingleItem',
+                appId: 'AlifiyaV-superpri-PRD-49a67cc35-af93214d',
+                params: {
+                    'ItemID': item.itemId,
+                    'IncludeSelector': 'Details,ItemSpecifics',
+                }
+            }, function(errr, detail) {
+                // ...
+                if (errr)
+                    console.log(errr)
+                if (detail.Ack == 'Success') {
+                    items.push(detail.Item);
+                    if (items.length == itemsResponse.searchResult.item.length)
+                      res.send(items);
+                }
+            });
+        });
 
-      var items = itemsResponse.searchResult.item;
-
-      console.log('Found', items.length, 'items');
-
-      res.send(items);
+      //console.log('Found', items.length, 'items');
     }
   );
 });
