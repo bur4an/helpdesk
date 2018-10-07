@@ -3,23 +3,30 @@
 /**
  * Module dependencies.
  */
-
+var fs = require('fs');
 var app = require('../app');
 var debug = require('debug')('test:server');
-var http = require('http');
+var path = require('path');
+//var http = require('http');
+var https = require('https');
+var certConfig = {
+ key: fs.readFileSync(path.resolve(__dirname, './cert/key.pem'), 'utf8'),
+ cert: fs.readFileSync(path.resolve(__dirname, './cert/chain.pem'), 'utf8')
+};
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '443');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+//var server = http.createServer(app);
+var server = https.createServer(certConfig, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -87,4 +94,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log('\r\nListening on ' + bind);
 }

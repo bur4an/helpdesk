@@ -1,4 +1,8 @@
 node_modules
 public/bundle.js
-pricelist
+files
 unusedComponents
+utils/config.js
+bin/cert
+cloud-manifest.xml
+public/lancom

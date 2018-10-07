@@ -1,14 +1,47 @@
 const express = require('express')
 const app = express()
-const path = require('path')
+
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const path = require('path')
+
+// graph-api authentication setup
+const passport = require('passport');
+const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
+const uuid = require('uuid');
+const config = require('./utils/config.js');
+
+const callback = (iss, sub, profile, accessToken, refreshToken, done) => {
+  done(null, {
+    profile,
+    accessToken,
+    refreshToken
+  });
+};
+
+passport.use(new OIDCStrategy(config.creds, callback));
+
+const users = {};
+passport.serializeUser((user, done) => {
+  const id = uuid.v4();
+  users[id] = user;
+  done(null, id);
+});
+passport.deserializeUser((id, done) => {
+  const user = users[id];
+  done(null, user);
+});
 
 const data = require('./routes/data')
-const fileData = require('./routes/fileData')
+const filedata = require('./routes/filedata')
+const graph = require('./routes/graph');
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(session({
@@ -17,13 +50,20 @@ app.use(session({
   saveUninitialized: true
 }))
 
-app.use('/data', data)
-app.use('/fileData', fileData)
+app.use(passport.initialize());
+app.use(passport.session());
 
+app.use('/data', data)
+app.use('/filedata', filedata)
+app.use('/graph', graph);
+
+app.get('/list', function(req, res) {
+  res.sendFile(path.resolve(__dirname, 'public/index.html'));
+})
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', function(req, res) {
-  res.sendFile(path.resolve(__dirname, 'public/index.html'));
+  res.redirect('/graph');
 })
 
 // catch 404 and forward to error handler

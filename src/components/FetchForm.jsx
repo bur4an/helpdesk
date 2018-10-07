@@ -1,18 +1,20 @@
 import React from 'react';
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-import IngramList from './IngramList.jsx'
+import {List, ListItem} from 'material-ui/List';
+import ActionGrade from 'material-ui/svg-icons/action/grade';
 
 const style = {
   margin: 12,
 };
 
-class Form extends React.Component {
+class FetchForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: 'LOGITECH', data:[]};
+    this.state = {value: '', data:[]};
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -21,7 +23,7 @@ class Form extends React.Component {
 
   handleSubmit = (event) => {
     this.setState({data:[]});
-    fetch('/fileData', {
+    fetch('/filedata', {
         method:'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -36,8 +38,11 @@ class Form extends React.Component {
     return (
       <div>
         <MuiThemeProvider>
+          {/***
+            Filter data based on field name
+          ***/}
           <SelectField
-            floatingLabelText="Brand"
+            floatingLabelText="Vendor Name"
             value={this.state.value}
             onChange={this.handleChange}
           >
@@ -46,11 +51,20 @@ class Form extends React.Component {
             <MenuItem value="ADOBE" primaryText="Adobe" />
             <MenuItem value="ACER" primaryText="Acer" />
           </SelectField>
-          <RaisedButton label="Search" primary={true} style={style} onClick={this.handleSubmit}/>
-          <IngramList data={this.state.data} />
+          <RaisedButton
+            label="List" primary={true}
+            style={style}
+            onClick={this.handleSubmit}
+            />
+
+            <List>
+              {this.state.data.map(list =>
+                <ListItem primaryText={list["Ingram Part Description"]} leftIcon={<ActionGrade />} />
+              )}
+            </List>
         </MuiThemeProvider>
       </div>
     );
   }
 }
-export default Form
+export default FetchForm

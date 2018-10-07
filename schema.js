@@ -10,6 +10,6 @@ var UserSchema = new mongoose.Schema({
     salt: String,
     hash: String
 });
-Schema.User = mongoose.model('users', UserSchema);
+Schema.User = mongoose.model('User', UserSchema);
 
 module.exports = Schema;

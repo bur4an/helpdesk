@@ -9,7 +9,7 @@ router.post('/', function(req, res) {
   var items = [];
 
   var params = {
-      keywords: req.body.search,
+      keywords: req.query.search,
       sortOrder: 'PricePlusShippingAsc',
       paginationInput:{
               entriesPerPage: '10',
@@ -73,7 +73,7 @@ router.post('/', function(req, res) {
             });
         });
 
-      //console.log('Found', items.length, 'items');
+      console.log('Found', items.length, 'items');
     }
   );
 });
