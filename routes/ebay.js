@@ -9,10 +9,10 @@ router.post('/', function(req, res) {
   var items = [];
 
   var params = {
-      keywords: req.query.search,
+      keywords: req.body.search,
       sortOrder: 'PricePlusShippingAsc',
       paginationInput:{
-              entriesPerPage: '10',
+              entriesPerPage: '20',
               pageNumber: 1,
                               },
       itemFilter: [{
@@ -50,8 +50,8 @@ router.post('/', function(req, res) {
     // gets all the items together in a merged array
     function itemsCallback(error, itemsResponse) {
       if (error) throw error;
-      console.log(itemsResponse)
-      if (itemsResponse.ack === 'Success')
+
+      if (itemsResponse.ack === 'Success' && parseInt(itemsResponse.searchResult.$.count) > 1)
         itemsResponse.searchResult.item.forEach(function(item) {
             ebay.xmlRequest({
                 serviceName: 'Shopping',
@@ -72,8 +72,6 @@ router.post('/', function(req, res) {
                 }
             });
         });
-
-      console.log('Found', items.length, 'items');
     }
   );
 });

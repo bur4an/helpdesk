@@ -1,6 +1,5 @@
 const express = require('express')
 const app = express()
-
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const path = require('path')
@@ -32,10 +31,6 @@ passport.deserializeUser((id, done) => {
   done(null, user);
 });
 
-const data = require('./routes/data')
-const filedata = require('./routes/filedata')
-const graph = require('./routes/graph');
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -53,17 +48,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/data', data)
-app.use('/filedata', filedata)
-app.use('/graph', graph);
 
-app.get('/list', function(req, res) {
-  res.sendFile(path.resolve(__dirname, 'public/index.html'));
-})
+const ebay = require('./routes/ebay')
+const csvdata = require('./routes/csvdata')
+const msgraph = require('./routes/msgraph');
+
+app.use('/ebay', ebay)
+app.use('/csvdata', csvdata)
+app.use('/msgraph', msgraph);
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', function(req, res) {
-  res.redirect('/graph');
+  res.sendFile(path.resolve(__dirname, 'public/index.html'));
 })
 
 // catch 404 and forward to error handler

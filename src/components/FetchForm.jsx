@@ -4,12 +4,36 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-import {List, ListItem} from 'material-ui/List';
+import GridList from '@material-ui/core/GridList';
 import ActionGrade from 'material-ui/svg-icons/action/grade';
 
-const style = {
-  margin: 12,
-};
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
+
+const styles = theme => ({
+  button:{
+    margin:12
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    width: 500,
+    height: 450,
+  },
+  icon: {
+    color: 'rgba(255, 255, 255, 0.54)',
+  },
+});
 
 class FetchForm extends React.Component {
   constructor(props) {
@@ -23,7 +47,7 @@ class FetchForm extends React.Component {
 
   handleSubmit = (event) => {
     this.setState({data:[]});
-    fetch('/filedata', {
+    fetch('/ebay', {
         method:'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -53,18 +77,40 @@ class FetchForm extends React.Component {
           </SelectField>
           <RaisedButton
             label="List" primary={true}
-            style={style}
+            style={styles.button}
             onClick={this.handleSubmit}
-            />
+          />
 
-            <List>
-              {this.state.data.map(list =>
-                <ListItem primaryText={list["Ingram Part Description"]} leftIcon={<ActionGrade />} />
-              )}
-            </List>
+        <GridList cellHeight={180} className={styles.gridList}>
+            <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
+              <ListSubheader component="div">{this.state.value}</ListSubheader>
+            </GridListTile>
+            {this.state.data.map(tile => (
+              <GridListTile key={tile.ItemID}>
+                <img src={tile.PictureURL} alt={tile.Title} />
+                <GridListTileBar
+                  title={tile.Title}
+                  subtitle={<span>sold: {tile.QuantitySold}</span>}
+                  actionIcon={
+                    <IconButton className={styles.icon}>
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>
         </MuiThemeProvider>
       </div>
     );
   }
 }
-export default FetchForm
+
+{/*
+  <List>
+    {this.state.data.map(list =>
+      <ListItem primaryText={list.Title} leftIcon={<ActionGrade />} />
+    )}
+  </List>
+  */}
+  export default FetchForm
