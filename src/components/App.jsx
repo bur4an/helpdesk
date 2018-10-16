@@ -2,16 +2,11 @@ import React from 'react';
 import FetchForm from './FetchForm.jsx'
 const REACT_VERSION = React.version;
 
-function Welcome(props) {
-  return <h1>Hello, {props.name}. Make your choice !</h1>;
-}
-
 class App extends React.Component {
   render(){
     return(
       <div>
-          <div> React version: {REACT_VERSION} </div>
-          <Welcome name="there" />
+          <div align="center"> React version: {REACT_VERSION} </div>
           <FetchForm />
       </div>
     )
@@ -19,17 +14,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-
-
-{/* Sample react Component
-
-import React from 'react';
-
-const CSVList = (props) => (
-  //Do something with the props
-);
-
-export default CSVList;
-
-*/}
