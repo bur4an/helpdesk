@@ -1,8 +1,6 @@
 node_modules
 public/bundle.js
-files
 unusedComponents
-utils/config.js
+routes/config.js
 bin/cert
-cloud-manifest.xml
-public/lancom
+files
