@@ -28,11 +28,13 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.2.0",
+    "ad": "^0.3.2",
     "cors": "^2.8.4",
     "ebay-api": "^1.13.7",
     "fast-csv": "^2.4.1",
     "fs": "0.0.1-security",
     "hbs": "^4.0.1",
+    "node-powershell": "^3.3.1",
     "passport": "^0.4.0",
     "passport-azure-ad": "^4.0.0",
     "path": "^0.12.7",

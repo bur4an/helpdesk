@@ -5,9 +5,9 @@ const request = require('superagent');
  * @param {string} accessToken The access token to send with the request.
  * @param {Function} callback
  */
-exports.getUserData = function (accessToken, callback) {
+exports.getUsers = function (accessToken, callback) {
   request
-   .get('https://graph.microsoft.com/beta/me')
+   .get('https://graph.microsoft.com/v1.0/users')
    .set('Authorization', 'Bearer ' + accessToken)
    .end((err, res) => {
      callback(err, res);
@@ -16,7 +16,7 @@ exports.getUserData = function (accessToken, callback) {
 
 exports.setPassword = function (accessToken, upn, password, callback) {
   request
-   .patch('https://graph.microsoft.com/v1.0/users/{'+ upn +'}')
+   .patch('https://graph.microsoft.com/v1.0/users/'+ upn )
    .set('Authorization', 'Bearer ' + accessToken)
    .send({
    "passwordProfile": {

@@ -28,9 +28,10 @@ passport.deserializeUser((id, done) => {
   done(null, user);
 });
 
+//
 router.get('/', (req, res) => {
   if (!req.isAuthenticated()) {
-    res.redirect('/msgraph/token');
+    res.redirect('/msgraph/token')
   } else {
       res.render('index')
   }
@@ -40,16 +41,20 @@ router.post('/', (req, res) => {
   if (!req.isAuthenticated()) {
     res.redirect('/msgraph/token');
   } else {
+      // set password
       msgraph.setPassword(req.session.token, req.body.upn, req.body.password, function(err, result){
+        console.log(result.body)
+        result.body.error ?
+          res.send(result.body.error.message + "  | <a href='/msgraph'>home</a>")
+          :
+          res.send("Success" + " | <a href='/msgraph'>home</a>")
 
-        res.send(result.body)
-
-        //Destroy the session / token since the job is done
-        req.session.destroy(() => {
-          req.logOut();
-          res.clearCookie('graphNodeCookie');
-        });
       })
+
+      //get all users
+      /*msgraph.getUsers(req.session.token, function(err, result){
+          console.log(result.body)
+      })*/
   }
 });
 
@@ -58,12 +63,26 @@ router.get('/token',
   passport.authenticate('azuread-openidconnect', { failureRedirect: '/' }),
     (req, res) => {
       //Do something here since you have the token now
-
       req.session.token = req.user.accessToken;
       res.redirect('/msgraph')
 
     }
 );
+
+router.get('/disconnect',
+    (req, res) => {
+      //Destroy the session
+      req.session.destroy(() => {
+        req.logOut();
+        res.clearCookie('graphNodeCookie');
+        res.redirect('/msgraph')
+      });
+
+    }
+);
+
+//Destroy the session / token since the job is done
+
 
 // helpers
 function hasAccessTokenExpired(e) {
